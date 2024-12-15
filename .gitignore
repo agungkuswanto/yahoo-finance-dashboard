@@ -9,4 +9,6 @@ keuangan.py
 NISP.py
 main.py
 quarter.py
+.venv
+.idea
 
