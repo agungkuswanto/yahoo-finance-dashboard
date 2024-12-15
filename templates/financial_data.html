@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Data</title>
+    <!-- Link ke Bootstrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Tambahkan link ke library Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-4 mb-4">
+        <h1>Financial Data Dashboard</h1>
+        <p>Get insights and visualizations for company financials</p>
+    </header>
+
+    <div class="container">
+        <!-- Form untuk menerima ticker -->
+        <form action="/financial_data" method="get" class="text-center mb-4">
+            <div class="form-group">
+                <label for="ticker_symbol">Enter Ticker Symbol (e.g., BBRI.JK): </label>
+                <input type="text" id="ticker_symbol" name="ticker_symbol" class="form-control w-50 mx-auto" required>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+
+        {% if ticker %}
+        
+        <h2 class="text-center mb-4 my-5">{{ key_stats['shortName'] }} </h2>
+
+        <div class="card mb-4">
+            <div class="text-center card-header text-white bg-primary">
+                <h4 class="mb-0">Company Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Kolom 1 -->
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><strong>Ticker:</strong> {{ ticker }} - ({{ key_stats['website'] }})</li>
+                            <li><strong>Name:</strong> {{ key_stats['shortName'] }}</li>
+                            <li><strong>Currency:</strong> {{ key_stats['financialCurrency'] }}</li>
+                            <li><strong>Market Cap:</strong> {{ (key_stats['marketCap'] / 1e9) | round(2) }} Billion</li>
+                        </ul>
+                    </div>
+                    <!-- Kolom 2 -->
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><strong>Country:</strong> {{  key_stats['country'] }}</li>
+                            <li><strong>Sector:</strong> {{ key_stats['sector'] }}</li>
+                            <li><strong>Industry:</strong> {{ key_stats['industry'] }}</li>
+                            <li><strong>Beta:</strong> {{  key_stats['beta'] }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+        <!-- Container untuk 6 Chart -->         
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">Revenue Chart</h3>
+                    <canvas id="revenueChart" class="border" width="300" height="200"></canvas>  
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">Net Income Chart</h3>
+                    <canvas id="netIncomeChart" class="border" width="300" height="200"></canvas>  
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">Dividends Chart</h3>
+                    <canvas id="dividendsChart" class="border" width="300" height="200"></canvas>  
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">EPS Chart</h3>
+                    <canvas id="EPSChart" class="border" width="300" height="200"></canvas>  
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">Free Cash Flow Chart</h3>
+                    <canvas id="FreeCashFlowChart" class="border" width="300" height="200"></canvas>  
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-center my-4">LT DEBT Chart</h3>
+                    <canvas id="LTDebtChart" class="border" width="300" height="200"></canvas>  
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-center mb-4 my-5">{{ key_stats['shortName'] }} </h2>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr id="Metric" class="bg-primary text-white">
+                    {% for column in df.columns %}
+                    <th class="text-center">{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in df.values %}
+                <tr id="{{ row[0]}}">
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+        
+        {% else %}
+        <!-- <p class="text-center">Please enter a ticker symbol above.</p> -->
+        <p class="text-center py-4">Please enter a ticker symbol above.</p>
+        {% endif %}
+    </div>
+   
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 Lavionda.com. All Rights Reserved.</p>
+        <p>Made with ❤️ by AGK</p>
+    </footer>
+
+     <!-- Link ke JavaScript Bootstrap (opsional, untuk interaksi) -->
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+     <script src="/static/js/finance.js"></script> 
+
+     <!-- Footer -->
+
+</body>
+</html>
