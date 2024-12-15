@@ -11,4 +11,9 @@ main.py
 quarter.py
 .venv
 .idea
+quarter.py
+quarter-nisp.py
+testdiv.py
+testnisp.py
+__pycache__
 
